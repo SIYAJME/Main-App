@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061520">
+<title>SIYAJ · Assurance workspace</title>
+<meta name="description" content="SIYAJ local workspace: test AI agents with synthetic data, review the evidence and score risks for capacity partners.">
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/assets/fonts.css">
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/insurance_styles.css">
+<script defer src="/assets/app.js"></script>
+<script defer src="/assets/insurance_ui.js"></script>
+<script defer src="/assets/underwriting_ui.js"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="emblem" viewBox="0 0 96 96"><rect x="1" y="1" width="94" height="94" rx="23" fill="#071722" stroke="#276358" stroke-width="2"/><rect x="21.5" y="27" width="11" height="45" fill="#70EDCF"/><rect x="63.5" y="27" width="11" height="45" fill="#70EDCF"/><rect x="21.5" y="61" width="53" height="11" fill="#70EDCF"/><rect x="42.5" y="27" width="11" height="29" fill="#F2D49A"/></symbol>
+    <symbol id="i-overview" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9.5h17M9.5 9.5v11"/></symbol>
+    <symbol id="i-engagement" viewBox="0 0 24 24"><rect x="3.5" y="7" width="17" height="13" rx="2"/><path d="M8.5 7V5.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2V7M3.5 13h17"/></symbol>
+    <symbol id="i-agent" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2"/><path d="M9.5 2.5v4M14.5 2.5v4M9.5 17.5v4M14.5 17.5v4M2.5 9.5h4M2.5 14.5h4M17.5 9.5h4M17.5 14.5h4"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.6 3.4 2.8 7.5 2.8s7.5-1.2 7.5-2.8v-13M4.5 12c0 1.6 3.4 2.8 7.5 2.8s7.5-1.2 7.5-2.8"/></symbol>
+    <symbol id="i-run" viewBox="0 0 24 24"><path d="M7.5 4.5l12 7.5-12 7.5z"/></symbol>
+    <symbol id="i-evidence" viewBox="0 0 24 24"><path d="M14 3.5H6.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V9z"/><path d="M14 3.5V9h5.5M9 15l2 2 4-4.5"/></symbol>
+    <symbol id="i-stamp" viewBox="0 0 24 24"><path d="M12 3.5a3 3 0 0 0-3 3c0 1.6 1 2.4 1 3.6V12H6.5a2 2 0 0 0-2 2v2.5h15V14a2 2 0 0 0-2-2H14v-1.9c0-1.2 1-2 1-3.6a3 3 0 0 0-3-3zM5 20.5h14"/></symbol>
+    <symbol id="i-dossier" viewBox="0 0 24 24"><path d="M3.5 6.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 7.9-7.5 9.5-4.3-1.6-7.5-4.9-7.5-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4v4.5H15"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M14.5 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 16.5L5.5 12 10 7.5M5.5 12h10"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14"/></symbol>
+  </defs>
+</svg>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<section id="auth" class="auth" hidden>
+  <div class="auth-side">
+    <div class="brand"><svg class="emblem" aria-hidden="true"><use href="#emblem"/></svg><strong>SIYAJ</strong><span class="ar" lang="ar">سياج</span></div>
+    <div class="auth-story">
+      <div class="auth-fence" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i class="gap"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="auth-claim">Every probe is a picket. Every gap is found, traced and reviewed before anyone relies on it.</p>
+    </div>
+    <p class="auth-foot">Runs on this computer. Synthetic data only. Agent tools are simulated, never executed.</p>
+  </div>
+  <div class="auth-main">
+    <form id="login-form" class="auth-form">
+      <h1>Sign in to the workspace</h1>
+      <p>Paste the key the launcher printed when it started.</p>
+      <label class="field" for="admin-token"><span>Workspace key</span></label>
+      <div class="pw"><input id="admin-token" type="password" autocomplete="current-password" required placeholder="Paste the key here"><button type="button" id="toggle-password" class="btn btn-ghost" aria-label="Show key">Show</button></div>
+      <button class="btn btn-primary btn-wide" type="submit">Sign in</button>
+      <p class="hint">Lost the key? It is saved in <code>data/admin_token.txt</code> inside the workspace folder. There is no default password.</p>
+    </form>
+  </div>
+</section>
+
+<div id="shell" class="shell" hidden>
+  <aside class="rail" id="sidebar">
+    <div class="rail-brand"><svg class="emblem" aria-hidden="true"><use href="#emblem"/></svg><span><strong>SIYAJ</strong><small>Assurance workspace</small></span><button class="icon-btn rail-close" id="menu-close" aria-label="Close menu"><svg class="ic"><use href="#i-close"/></svg></button></div>
+    <nav id="side-nav" aria-label="Workspace">
+      <button class="nav-link active" data-page="overview"><svg class="ic"><use href="#i-overview"/></svg><span>Overview</span></button>
+      <p class="nav-group">Test an agent</p>
+      <button class="nav-link" data-page="engagements"><svg class="ic"><use href="#i-engagement"/></svg><span>Engagements</span></button>
+      <button class="nav-link" data-page="agents"><svg class="ic"><use href="#i-agent"/></svg><span>Agents</span></button>
+      <button class="nav-link" data-page="datasets"><svg class="ic"><use href="#i-data"/></svg><span>Synthetic data</span></button>
+      <button class="nav-link" data-page="assess"><svg class="ic"><use href="#i-run"/></svg><span>Run assessment</span></button>
+      <button class="nav-link" data-page="evidence"><svg class="ic"><use href="#i-evidence"/></svg><span>Evidence</span></button>
+      <p class="nav-group">Underwrite</p>
+      <button class="nav-link" data-page="underwriting"><svg class="ic"><use href="#i-stamp"/></svg><span>Underwriting</span></button>
+      <button class="nav-link" data-page="insurance"><svg class="ic"><use href="#i-dossier"/></svg><span>Risk dossiers</span></button>
+      <p class="nav-group">System</p>
+      <button class="nav-link" data-page="settings"><svg class="ic"><use href="#i-shield"/></svg><span>Readiness and safety</span></button>
+    </nav>
+    <div class="rail-foot">
+      <div class="engine" id="engine-status"><i class="dot"></i><span>Checking the engine</span></div>
+      <div class="operator"><span class="avatar" aria-hidden="true">OP</span><span class="who"><b>Operator</b><small>Single user, this computer</small></span><button id="logout" class="icon-btn" title="Sign out" aria-label="Sign out"><svg class="ic"><use href="#i-logout"/></svg></button></div>
+    </div>
+  </aside>
+  <div id="mobile-backdrop" class="backdrop" hidden></div>
+
+  <div class="workspace">
+    <header class="topbar">
+      <button class="icon-btn hamburger" id="menu-button" aria-label="Open menu" aria-controls="sidebar"><svg class="ic"><use href="#i-menu"/></svg></button>
+      <span class="topbar-brand"><svg class="emblem" aria-hidden="true"><use href="#emblem"/></svg>SIYAJ</span>
+      <strong id="crumb" class="crumb">Overview</strong>
+      <button class="icon-btn" id="refresh-button" title="Reload data" aria-label="Reload data"><svg class="ic"><use href="#i-refresh"/></svg></button>
+    </header>
+
+    <main id="main-content">
+
+    <section class="page active" id="page-overview">
+      <header class="page-head"><div><h1>Overview</h1><p>What has been tested, what was found, and where each risk stands with your capacity partners.</p></div>
+        <div class="actions"><button class="btn btn-secondary" data-goto="datasets">Generate data</button><button class="btn btn-primary" data-goto="assess">Run assessment</button></div></header>
+      <ol class="pipeline" id="overview-pipeline" aria-label="Testing pipeline"></ol>
+      <div class="split split-wide">
+        <section class="block">
+          <div class="block-head"><h2>Recent assessments</h2><button class="link" data-goto="evidence">All evidence</button></div>
+          <div id="recent-runs" class="ledger"><p class="empty">Loading assessments…</p></div>
+        </section>
+        <div class="stack">
+          <section class="well" id="overview-start">
+            <h2>Start with the sample workspace</h2>
+            <p class="hint">Creates a UAE banking engagement, a guarded and a deliberately vulnerable demo agent, and 30 synthetic customer records. Then run your first 12-probe assessment.</p>
+            <ol class="steps">
+              <li><button data-goto="engagements"><b>Create an engagement</b><small>Client, market and authorized scope</small></button></li>
+              <li><button data-goto="agents"><b>Register an agent</b><small>Demo fixture, model reference or your staging adapter</small></button></li>
+              <li><button data-goto="datasets"><b>Generate synthetic data</b><small>UAE or KSA records with private fields and canaries</small></button></li>
+              <li><button data-goto="assess"><b>Run and review</b><small>12 probes, analyst review, PDF evidence</small></button></li>
+            </ol>
+            <button id="seed-demo" class="btn btn-primary btn-wide">Set up the sample workspace</button>
+          </section>
+          <section class="block"><div class="block-head"><h2>Underwriting book</h2><button class="link" data-goto="underwriting">Open</button></div><div id="overview-book"><p class="empty">No submissions yet.</p></div></section>
+          <section class="block"><div class="block-head"><h2>Risk dossiers</h2><button class="link" data-goto="insurance">Open</button></div><div id="overview-dossiers"><p class="empty">No dossiers yet.</p></div></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-engagements">
+      <header class="page-head"><div><h1>Engagements</h1><p>One engagement per client and market, each with its own authorized scope. UAE and KSA work stays separate.</p></div></header>
+      <div class="split split-form">
+        <section class="block"><div class="block-head"><h2>All engagements</h2><span class="count" id="project-count">0</span></div><div id="project-list" class="ledger"></div></section>
+        <section class="well"><h2>New engagement</h2>
+          <form id="project-form" class="form">
+            <label class="field"><span>Engagement name</span><input name="name" required minlength="3" maxlength="100" placeholder="Customer support agent evaluation"></label>
+            <label class="field"><span>Client or organization</span><input name="client" required minlength="2" maxlength="100" placeholder="Example Fintech LLC"></label>
+            <div class="pair"><label class="field"><span>Market</span><select name="region"><option>UAE</option><option>KSA</option><option>Regional</option></select></label>
+              <label class="field"><span>Industry</span><select name="sector"><option value="banking">Banking</option><option value="insurance">Insurance</option><option value="technology">Technology</option><option value="healthcare">Healthcare</option><option value="retail">Retail</option><option value="hr">HR</option><option value="other">Other</option></select></label></div>
+            <label class="field"><span>Authorized scope</span><textarea name="description" rows="3" maxlength="450" placeholder="Staging agent, permitted data types, acceptance criteria"></textarea></label>
+            <button type="submit" class="btn btn-primary">Create engagement</button>
+          </form></section>
+      </div>
+    </section>
+
+    <section class="page" id="page-agents">
+      <header class="page-head"><div><h1>Agents</h1><p>The agents you test. Demo fixtures and model-backed reference agents, or your own agent through a staging HTTP adapter. Credentials stay in server environment variables.</p></div></header>
+      <div class="split split-form">
+        <section class="block"><div class="block-head"><h2>Registered agents</h2><span class="count" id="agent-count">0</span></div><div id="agent-list" class="ledger"></div>
+          <p class="hint block-note">Reference agents run a real model against simulated tools. Your own agents connect through the staging HTTP adapter, whatever framework they use. See CONNECT_YOUR_AGENT.md.</p></section>
+        <section class="well"><h2>Register an agent</h2>
+          <form id="agent-form" class="form">
+            <label class="field"><span>Agent name</span><input name="name" required minlength="3" maxlength="90" placeholder="Customer support staging agent"></label>
+            <label class="field"><span>Framework or implementation</span><input name="framework" maxlength="90" value="Custom HTTP" placeholder="LangGraph, Agents SDK, internal"></label>
+            <div class="pair"><label class="field"><span>Connection</span><select name="mode" id="agent-mode"><option value="demo_guarded">Guarded demo fixture</option><option value="demo_vulnerable">Vulnerable demo fixture</option><option value="openai">OpenAI reference agent</option><option value="webhook">Your staging HTTP adapter</option><option value="langgraph">LangGraph reference</option><option value="agents_sdk">OpenAI Agents SDK reference</option><option value="crewai">CrewAI reference</option><option value="copilot_studio">Copilot Studio (limited)</option></select></label>
+              <label class="field"><span>Environment</span><select name="environment" id="agent-environment"><option value="demo">Demo</option><option value="staging">Staging</option></select></label></div>
+            <div id="agent-url-box" hidden><label class="field"><span>Adapter URL</span><input name="endpoint" type="url" placeholder="http://127.0.0.1:9000/test"></label><p class="hint">Remote hosts must be allowlisted on the server. Never put secrets in the URL.</p></div>
+            <label class="field" id="agent-model-box"><span>Model (live reference agents only)</span><input name="model" value="gpt-4.1-mini" maxlength="80"></label>
+            <button type="submit" class="btn btn-primary">Register agent</button>
+          </form></section>
+      </div>
+    </section>
+
+    <section class="page" id="page-datasets">
+      <header class="page-head"><div><h1>Synthetic data</h1><p>Reproducible fictional records with private fields and hidden canaries, so a leak is provable. Never upload real customer records.</p></div></header>
+      <div class="split split-form">
+        <section class="block"><div class="block-head"><h2>Datasets</h2><span class="count" id="dataset-count">0</span></div><div id="dataset-list" class="ledger"></div></section>
+        <div class="stack">
+          <section class="well"><h2>Generate a dataset</h2>
+            <form id="dataset-form" class="form">
+              <label class="field"><span>Dataset name</span><input name="name" required minlength="2" maxlength="80" value="Synthetic customers for agent testing"></label>
+              <div class="pair"><label class="field"><span>Industry</span><select name="domain"><option value="banking">Banking</option><option value="insurance">Insurance</option><option value="healthcare">Healthcare</option><option value="retail">Retail</option><option value="hr">HR</option></select></label>
+                <label class="field"><span>Country</span><select name="region"><option>UAE</option><option>KSA</option></select></label></div>
+              <div class="pair"><label class="field"><span>Records</span><input type="number" name="count" value="30" min="2" max="250"></label>
+                <label class="field"><span>Seed (optional)</span><input type="number" name="seed" min="0" max="4294967295" placeholder="Random"></label></div>
+              <button type="submit" class="btn btn-primary">Generate records</button>
+            </form></section>
+          <section class="well"><h2>Import your own synthetic file</h2>
+            <form id="upload-form" class="form">
+              <label class="field"><span>CSV or JSON file, under 950 KB</span><input type="file" name="file" id="dataset-file" accept=".csv,.json,application/json,text/csv" required></label>
+              <div class="pair"><label class="field"><span>Industry</span><select name="domain"><option value="banking">Banking</option><option value="insurance">Insurance</option><option value="healthcare">Healthcare</option><option value="retail">Retail</option><option value="hr">HR</option></select></label>
+                <label class="field"><span>Country</span><select name="region"><option>UAE</option><option>KSA</option></select></label></div>
+              <label class="check"><input type="checkbox" name="synthetic_ack" required><span>Every record in this file is fictional or authorized synthetic test data.</span></label>
+              <button type="submit" class="btn btn-secondary">Import dataset</button>
+            </form></section>
+        </div>
+      </div>
+      <section class="block preview" id="dataset-preview" hidden></section>
+    </section>
+
+    <section class="page" id="page-assess">
+      <header class="page-head"><div><h1>Run an assessment</h1><p>Twelve probes against synthetic data: two everyday tasks and ten attacks. Each result is graded on what the agent actually did. A missing trace is never scored as safe.</p></div></header>
+      <div class="split split-even">
+        <section class="well"><h2>Set up the run</h2>
+          <form id="assess-form" class="form">
+            <label class="field"><span>Engagement</span><select id="assess-project" name="project_id" required></select></label>
+            <label class="field"><span>Agent</span><select id="assess-agent" name="agent_id" required></select></label>
+            <label class="field"><span>Synthetic dataset</span><select id="assess-dataset" name="dataset_id" required></select></label>
+            <label class="field"><span>Authorized by</span><input name="authorized_by" required minlength="2" placeholder="Name of the person who approved this test"></label>
+            <label class="field"><span>Scope and restrictions</span><textarea name="scope_note" rows="2" maxlength="400">Synthetic data only; staging tools must block real-world side effects.</textarea></label>
+            <div class="probe-list"><b>What gets probed</b><p>Privacy leaks, unauthorized actions, poisoned retrieval, role spoofing and output integrity, plus two benign controls that check the agent still does its job.</p></div>
+            <label class="check"><input type="checkbox" name="authorized_staging" required><span>I have written permission to test this agent, and it runs in an isolated or controlled staging environment.</span></label>
+            <label class="check"><input type="checkbox" name="synthetic_only" required><span>Only synthetic or approved test data is used, and I understand it may be sent to the selected agent or model.</span></label>
+            <button type="submit" id="run-submit" class="btn btn-primary btn-wide">Run 12 probes</button>
+          </form></section>
+        <section class="block"><div class="block-head"><h2>Live run</h2><span class="tag tag-quiet" id="run-badge">No run yet</span></div>
+          <div id="run-monitor" class="monitor"><div class="fence fence-lg" aria-hidden="true">
+            <i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i><i class="pk pending"></i></div>
+            <h3>The next run fills this fence</h3><p class="hint">Each picket is one probe. Held probes stand, findings leave a gap, and anything that couldn't be scored is hatched for review.</p></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="page" id="page-evidence">
+      <header class="page-head"><div><h1>Evidence</h1><p>What each agent attempted, how it was graded, and the analyst's review. Export any assessment as PDF, JSON or CSV.</p></div></header>
+      <div class="split split-doc">
+        <section class="block"><div class="block-head"><h2>Assessments</h2><span class="count" id="assessment-count">0</span></div><div id="assessment-list" class="ledger"></div></section>
+        <article class="paper" id="assessment-detail"><div class="paper-empty"><h3>No assessment open</h3><p>Choose one from the list to open its evidence report.</p></div></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-underwriting">
+      <header class="page-head"><div><h1>Underwriting</h1><p>Score AI risk submissions against a capacity partner's underwriting box, using observed test evidence. Analysis for licensed partners only: no quotes, premiums or binding.</p></div>
+        <div class="actions"><button class="btn btn-secondary" id="uw-new">New submission</button><button class="btn btn-primary" id="uw-seed">Load sample book</button></div></header>
+      <div class="figures" id="uw-metrics"></div>
+      <div class="split split-doc">
+        <div class="stack">
+          <section class="block"><div class="block-head"><h2>The book</h2><span class="count" id="uw-count">0</span></div><div id="uw-list" class="ledger"></div></section>
+          <details class="well fold" id="uw-sub-wrap"><summary><h2>Submission</h2><span class="tag tag-quiet" id="uw-form-mode">New</span></summary><form id="uw-sub-form" class="form"></form></details>
+          <details class="well fold" id="uw-box-wrap"><summary><h2>Underwriting box</h2><span class="tag tag-quiet" id="uw-box-ver">v1</span></summary><p class="hint">Co-designed with capacity partners. Saving the box re-scores every submission in the book.</p><form id="uw-box-form" class="form"></form></details>
+        </div>
+        <div class="stack">
+          <article class="paper slip" id="uw-detail"><div class="paper-empty"><h3>No submission open</h3><p>Load the sample book or score a new submission to see its slip.</p></div></article>
+          <section class="block"><div class="block-head"><h2>Concentration</h2><span class="count">By model provider</span></div><div id="uw-portfolio"></div></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-insurance">
+      <header class="page-head"><div><h1>Risk dossiers</h1><p>The AI exposure questionnaire and observed test evidence, packaged for buyers, boards and licensed insurance partners. Non-binding technical evidence only.</p></div>
+        <div class="actions"><button class="btn btn-secondary" id="ins-new">New dossier</button><button class="btn btn-primary" id="ins-demo">Load fictional example</button></div></header>
+      <div class="figures" id="ins-metrics"></div>
+      <div class="split split-dossier">
+        <div class="stack">
+          <section class="block"><div class="block-head"><h2>Dossiers</h2><span class="count" id="ins-portfolio-summary">0</span></div><div class="ledger" id="ins-dossier-list"></div></section>
+          <section class="well"><div class="well-head"><h2>AI exposure questionnaire</h2><span class="tag tag-quiet" id="ins-form-mode">New dossier</span></div>
+            <form id="ins-form" class="form">
+              <label class="field"><span>Engagement</span><select name="project_id" required><option value="">Create an engagement first</option></select></label>
+              <label class="field"><span>Linked technical assessment</span><select name="assessment_id"><option value="">Not linked yet</option></select></label>
+              <label class="field"><span>Organization</span><input name="legal_entity" minlength="3" maxlength="140" required placeholder="Fictional Insurtech LLC"></label>
+              <label class="field"><span>What the agent does</span><textarea name="use_case" maxlength="500" minlength="5" rows="2" required placeholder="What does the agent decide, access or do?"></textarea></label>
+              <label class="field"><span>Tools and permissions</span><textarea name="agent_actions" maxlength="500" minlength="4" rows="2" required placeholder="Read records, issue recommendations, update claims"></textarea></label>
+              <label class="field"><span>Risk owner</span><input name="risk_owner" minlength="2" maxlength="120" required placeholder="Person accountable for the controls"></label>
+              <div class="pair"><label class="field"><span>Autonomy</span><select name="autonomy"><option value="read_only">Read only</option><option value="recommend">Recommends</option><option value="approval_gated">Human approves actions</option><option value="autonomous">Acts on its own</option></select></label>
+                <label class="field"><span>Data sensitivity</span><select name="data_classification"><option value="public">Public</option><option value="internal">Internal</option><option value="confidential" selected>Confidential</option><option value="restricted">Restricted</option></select></label></div>
+              <div class="pair"><label class="field"><span>Customer impact</span><select name="customer_impact"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="critical">Critical</option></select></label>
+                <label class="field"><span>Volume</span><input name="volume" maxlength="160" value="Not supplied"></label></div>
+              <label class="field"><span>Deployment context</span><input name="deployment" maxlength="250" value="Controlled staging, planned production"></label>
+              <label class="field"><span>Data residency and contract terms</span><input name="data_residency" maxlength="300" value="To be confirmed"></label>
+              <fieldset class="choices"><legend>Insurance lines to discuss</legend>
+                <label class="check"><input type="checkbox" name="lines" value="cyber" checked><span>Cyber liability</span></label>
+                <label class="check"><input type="checkbox" name="lines" value="tech_eo" checked><span>Technology E&amp;O</span></label>
+                <label class="check"><input type="checkbox" name="lines" value="professional_indemnity"><span>Professional indemnity</span></label>
+                <label class="check"><input type="checkbox" name="lines" value="crime_fraud"><span>Crime and social engineering</span></label>
+                <label class="check"><input type="checkbox" name="lines" value="business_interruption"><span>Business interruption</span></label>
+              </fieldset>
+              <div class="controls-head"><b>Control self-assessment</b><small>Answers are self-reported by the client and not independently verified.</small></div>
+              <div class="controls" id="ins-controls"><p class="empty">Loading the control questions…</p></div>
+              <label class="field"><span>Evidence and notes</span><textarea name="notes" rows="3" maxlength="3000" placeholder="Known exclusions, evidence references, operating boundaries"></textarea></label>
+              <button class="btn btn-primary btn-wide" id="ins-save" type="submit">Create dossier</button>
+              <p class="fine">Technical assurance only. Not an insurance application, recommendation, rating, premium, quote or binder.</p>
+            </form>
+          </section>
+        </div>
+        <div class="stack">
+          <article class="paper" id="ins-profile"><div class="paper-empty"><h3>No dossier open</h3><p>Choose a dossier to see its risk signals, questionnaire completeness and technical evidence together.</p></div></article>
+          <section class="well" id="ins-review-box" hidden><div class="well-head"><h2>Partner review trail</h2><span class="tag tag-quiet">Versioned</span></div>
+            <p id="ins-review-target" class="hint"></p>
+            <form id="ins-review-form" class="form">
+              <div class="pair"><label class="field"><span>Partner organization</span><input name="organization" minlength="2" maxlength="140" placeholder="Example licensed insurer" required></label>
+                <label class="field"><span>Reviewer</span><input name="reviewer" minlength="2" maxlength="120" placeholder="Underwriter or broker contact" required></label></div>
+              <label class="field"><span>Outcome of the discussion</span><select name="disposition"><option value="request_more_evidence">Asked for more technical evidence</option><option value="acknowledged">Evidence received and acknowledged</option><option value="discussion_ready">Ready for further non-binding discussion</option><option value="not_progressing">Not progressing</option></select></label>
+              <label class="field"><span>Notes and outstanding evidence</span><textarea name="notes" rows="3" minlength="6" maxlength="4000" required placeholder="Which questions were asked? Which documents are still outstanding?"></textarea></label>
+              <button class="btn btn-secondary" type="submit">Record discussion</button>
+            </form>
+            <div class="history" id="ins-review-history"></div>
+          </section>
+          <aside class="note"><b>Where SIYAJ stops</b><p>SIYAJ assembles technical risk evidence. It does not solicit, price, place, bind, underwrite or sell insurance. Licensed insurers and intermediaries make their own assessment.</p></aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-settings">
+      <header class="page-head"><div><h1>Readiness and safety</h1><p>What is configured on this computer, what this build can be trusted with, and what sits outside it.</p></div></header>
+      <div class="split split-even">
+        <section class="block"><div class="block-head"><h2>Connections</h2></div><div id="readiness" class="ledger"></div></section>
+        <section class="block"><div class="block-head"><h2>Boundaries of this build</h2></div>
+          <ul class="bounds">
+            <li class="ok"><b>Evidence is kept</b><p>Runs, dataset fingerprints and analyst reviews are stored in a local SQLite database.</p></li>
+            <li class="ok"><b>Tools are simulated</b><p>Reference agents can request tools; no money moves and no emails or records change.</p></li>
+            <li><b>Not a hardened code sandbox</b><p>Do not run untrusted agent code. Your agents must run in isolated staging with dangerous actions disabled.</p></li>
+            <li><b>Not multi-tenant</b><p>One operator on one computer. There are no user accounts or customer separation.</p></li>
+            <li><b>Not insurance advice</b><p>Dossiers and slips are non-binding technical evidence. No rating, quote, placement or coverage decision.</p></li>
+          </ul></section>
+      </div>
+      <section class="block audit-block"><div class="block-head"><h2>Audit log</h2><span class="tag tag-quiet" id="audit-verify">Checking the chain</span></div><div id="activity-log" class="ledger"></div></section>
+    </section>
+
+    </main>
+    <footer class="footer"><span>SIYAJ assurance workspace <span id="app-version"></span></span><span>Authorized synthetic testing for the UAE and Saudi Arabia</span></footer>
+  </div>
+</div>
+</body>
+</html>
