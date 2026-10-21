@@ -1,0 +1,16 @@
+services:
+  assurance:
+    build: .
+    ports:
+      - "127.0.0.1:8765:8765"
+    environment:
+      ARG_DB_PATH: /app/data/redteam.sqlite3
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ARG_BRIDGE_TOKEN: ${ARG_BRIDGE_TOKEN:-}
+      ARG_ADMIN_TOKEN: ${ARG_ADMIN_TOKEN:-}
+      ARG_ALLOW_REMOTE_TARGETS: "0"
+    volumes:
+      - arg_evidence:/app/data
+    restart: unless-stopped
+volumes:
+  arg_evidence:

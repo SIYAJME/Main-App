@@ -1,0 +1,13 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+data/*
+!data/.gitkeep
+*.sqlite3*
+.DS_Store
+
+data/*.sqlite3
+data/admin_token.txt
+.env
